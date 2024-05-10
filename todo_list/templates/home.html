@@ -1,0 +1,74 @@
+
+{% extends "base.html" %}
+
+{%block title%} To-Do {%endblock%}
+
+{%block content%}
+<br/><br/>
+
+<form class="d-flex w-50 position-relative mx-auto p-2" role="search" method="POST" >
+    {% csrf_token %}
+    <input class="form-control me-2 " type="search" placeholder="To-Do item" aria-label="Search" name="item">
+    <button class="btn btn-outline-secondary" type="submit">Add</button>
+  </form>
+
+<br/>
+{% if messages %}
+    {% for message in messages  %}
+        <div class="alert alert-warning d-flex align-items-center" role="alert">
+            <button class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                
+            </button>
+            &nbsp&nbsp&nbsp{{message}}
+        </div>
+    {% endfor %}
+
+{% endif %}
+
+<br/><br/>
+    {% if all_items %}
+        <table class="table table-dark w-75 position-relative mx-auto p-2" id="hover">
+            {% for things in all_items%}
+                {% if things.completed  %}
+
+                    <tr class ="table-light ">
+                        <td>
+                            <div class="form-check">
+                                   
+                                        <a href="{% url 'uncross' things.id %}" class="form-check-input ms-2" type="checkbox"></a>
+                                    
+                                </div>
+
+                        </td>
+                        <td class="text-decoration-line-through">{{things.item}}</td>
+                        
+                        <td class="text-decoration-line-through"><center><a href="{% url 'edit' things.id %}" class="btn btn-dark">Edit Item</a></center></td>
+                        <td><center><a href="{% url 'delete' things.id %}" class="btn btn-outline-dark">X</a></center></td>
+                        
+                    </tr>
+                    <br/>
+                {% else %}
+                    <tr>
+                        <td>
+                            <div class="form-check">
+                                <a href="{% url 'cross_off' things.id %}" class="form-check-input ms-2 text-decoration-line-through" type="checkbox"></a>    
+                            </div>    
+
+                            
+                        </td>
+                        <td >{{things.item}}</td>
+                        
+                        <td ><center><a href="{% url 'edit' things.id %}" class="btn btn-outline-light">Edit Item</a></center></td>
+                        <td><center><a href="{% url 'delete' things.id %}" class="btn btn-outline-light">X</a></center></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+
+
+        </table>
+    {% endif %}
+
+
+
+{%endblock%}
